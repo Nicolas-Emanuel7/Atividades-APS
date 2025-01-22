@@ -1,0 +1,72 @@
+@startuml "Plataforma de Cursos de Idiomas Online"
+left to right direction
+
+:Professor: as professor
+' :Plataforma: as plataforma
+
+
+rectangle "Plataforma de Cursos de Idiomas Online"{
+    (Fazer Cadastro como Professor) as fazer_cadastro_professor
+    (Visualizar Perfil de Professor) as visualizar_perfil_professor
+    (Atualizar Perfil de Professor) as atualizar_perfil_professor
+    (Cadastrar Curso) as cadastrar_curso
+    (Remover Curso) as remover_curso
+    (Atualizar Curso) as atualizar_curso
+    (Visualizar Curso) as visualizar_curso
+    (Visualizar Notas dos Alunos) as visualizar_notas_alunos
+    (Listar Cursos Ministrados) as listar_cursos_ministrados
+    (Adicionar Aula ao Curso) as adicionar_aula_curso
+    (Remover Aula do Curso) as remover_aula_curso
+    (Atualizar Aula do Curso) as atualizar_aula_curso
+    (Visualizar Aula do Curso) as visualizar_aula_curso
+    (Listar Aulas do Curso) as listar_aulas_curso
+    (Listar Alunos Inscritos no Curso) as listar_alunos_inscritos_curso
+    (Disponibilizar Agendamento de Tutoria) as disponibilizar_agendamento_tutoria
+    (Aceitar Solicitação de Tutoria) as aceitar_solicitacao_tutoria
+    (Recusar Solicitação de Tutoria) as recusar_solicitacao_tutoria
+    (Visualizar Solicitação de Tutoria) as visualizar_solicitacao_tutoria
+    (Listar Tutorias Lecionadas) as listar_tutorias_lecionadas
+    (Emitir Certificado de Conclusão de Curso) as emitir_certificado_conclusao_curso
+    (Listar Certificados Emitidos por Curso) as listar_certificados_emitidos_curso
+    (Atualizar Perfil de Professor) as atualizar_perfil_professor
+
+    (Realizar Login) as realizar_login
+}
+
+professor -down-> fazer_cadastro_professor
+professor -down-> visualizar_perfil_professor
+professor -down-> cadastrar_curso
+professor -down-> visualizar_curso
+professor -down-> listar_cursos_ministrados
+
+professor -right-> disponibilizar_agendamento_tutoria
+professor -right-> visualizar_solicitacao_tutoria
+professor -right-> listar_tutorias_lecionadas
+
+professor --> emitir_certificado_conclusao_curso
+professor --> listar_certificados_emitidos_curso
+professor --> atualizar_perfil_professor
+
+professor --> realizar_login
+
+visualizar_perfil_professor .down.> atualizar_perfil_professor: <<extend>
+
+listar_cursos_ministrados .down.> visualizar_curso: <<extend>
+
+visualizar_curso .down.> listar_alunos_inscritos_curso: <<extend>
+visualizar_curso .down.> visualizar_notas_alunos: <<extend>
+visualizar_curso .left.> remover_curso: <<extend>
+visualizar_curso .left.> atualizar_curso: <<extend>
+
+visualizar_curso .left.> listar_aulas_curso: <<extend>
+
+listar_aulas_curso .down.> visualizar_aula_curso: <<extend>
+listar_aulas_curso .down.> adicionar_aula_curso: <<extend>
+
+visualizar_aula_curso .right.> remover_aula_curso: <<extend>
+visualizar_aula_curso .right.> atualizar_aula_curso: <<extend>
+
+visualizar_solicitacao_tutoria .right.> aceitar_solicitacao_tutoria: <<extend>
+visualizar_solicitacao_tutoria .right.> recusar_solicitacao_tutoria: <<extend>
+
+@enduml
