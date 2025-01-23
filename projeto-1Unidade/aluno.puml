@@ -12,11 +12,11 @@ rectangle "Plataforma de Cursos de Idiomas Online"{
     (Realizar Login) as realizar_login
 
     (Fazer Cadastro como Aluno) as fazer_cadastro_aluno
-    (Visualizar Perfil de Aluno) as visualizar_perfil_aluno
-    (Atualizar Perfil de Aluno) as atualizar_perfil_aluno
+    ' (Visualizar Perfil de Aluno) as visualizar_perfil_aluno
+    ' (Atualizar Perfil de Aluno) as atualizar_perfil_aluno
     (Visualizar Cursos Disponíveis) as visualizar_cursos_disponiveis
-    (Filtrar Listagem de Cursos) as filtrar_listagem_cursos
-    (Buscar Curso) as buscar_curso
+    ' (Filtrar Listagem de Cursos) as filtrar_listagem_cursos
+    ' (Buscar Curso) as buscar_curso
     (Fazer Inscrição em Curso) as fazer_inscricao_curso
     (Cancelar Inscrição em Curso) as cancelar_inscricao_curso
     (Assistir Aula) as assistir_aula
@@ -26,21 +26,15 @@ rectangle "Plataforma de Cursos de Idiomas Online"{
     (Solicitar Certificado de Curso) as solicitar_certificado_curso
     (Visualizar Certificado de Curso) as visualizar_certificado_curso
     (Listar Certificados Adquiridos) as listar_certificados_adquiridos
-    (Avaliar Curso) as avaliar_curso
-    (Fazer Comentário em Chat de Aula) as fazer_comentario_chat_aula
-    (Responder Comentário em Chat de Aula) as responder_comentario_chat_aula
+    ' (Avaliar Curso) as avaliar_curso
+    ' (Fazer Comentário em Chat de Aula) as fazer_comentario_chat_aula
+    ' (Responder Comentário em Chat de Aula) as responder_comentario_chat_aula
 }
 
 aluno --> fazer_cadastro_aluno
 aluno --> realizar_login
-aluno --> visualizar_perfil_aluno
-
-visualizar_perfil_aluno <.down. atualizar_perfil_aluno: <<extend>
 
 aluno --> visualizar_cursos_disponiveis
-
-visualizar_cursos_disponiveis <.down. filtrar_listagem_cursos: <<extend>
-visualizar_cursos_disponiveis <.down. buscar_curso: <<extend>
 
 aluno --> fazer_inscricao_curso
 aluno --> visualizar_curso
@@ -48,14 +42,11 @@ aluno --> visualizar_curso
 visualizar_curso <.down. cancelar_inscricao_curso: <<extend>
 visualizar_curso <.down. listar_aulas_curso: <<extend>
 visualizar_curso <.down. solicitar_certificado_curso: <<extend>
-visualizar_curso <.down. avaliar_curso: <<extend>
 
 listar_aulas_curso <.down. visualizar_aula_curso: <<extend>
 listar_aulas_curso <.down. listar_aulas_assistidas_curso: <<extend>
 
 visualizar_aula_curso <.up. assistir_aula: <<extend>
-visualizar_aula_curso <.up. fazer_comentario_chat_aula: <<extend>
-visualizar_aula_curso <.up. responder_comentario_chat_aula: <<extend>
 
 aluno --> listar_certificados_adquiridos
 

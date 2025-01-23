@@ -7,13 +7,13 @@ left to right direction
 
 rectangle "Plataforma de Cursos de Idiomas Online"{
     (Fazer Cadastro como Professor) as fazer_cadastro_professor
-    (Visualizar Perfil de Professor) as visualizar_perfil_professor
-    (Atualizar Perfil de Professor) as atualizar_perfil_professor
+    ' (Visualizar Perfil de Professor) as visualizar_perfil_professor
+    ' (Atualizar Perfil de Professor) as atualizar_perfil_professor
     (Cadastrar Curso) as cadastrar_curso
     (Remover Curso) as remover_curso
     (Atualizar Curso) as atualizar_curso
     (Visualizar Curso) as visualizar_curso
-    (Visualizar Notas dos Alunos) as visualizar_notas_alunos
+    ' (Visualizar Notas dos Alunos) as visualizar_notas_alunos
     (Listar Cursos Ministrados) as listar_cursos_ministrados
     (Adicionar Aula ao Curso) as adicionar_aula_curso
     (Remover Aula do Curso) as remover_aula_curso
@@ -28,45 +28,39 @@ rectangle "Plataforma de Cursos de Idiomas Online"{
     (Listar Tutorias Lecionadas) as listar_tutorias_lecionadas
     (Emitir Certificado de Conclusão de Curso) as emitir_certificado_conclusao_curso
     (Listar Certificados Emitidos por Curso) as listar_certificados_emitidos_curso
-    (Atualizar Perfil de Professor) as atualizar_perfil_professor
 
     (Realizar Login) as realizar_login
 }
 
 professor -down-> fazer_cadastro_professor
-professor -down-> visualizar_perfil_professor
 professor -down-> cadastrar_curso
 professor -down-> visualizar_curso
 professor -down-> listar_cursos_ministrados
 
-professor -right-> disponibilizar_agendamento_tutoria
-professor -right-> visualizar_solicitacao_tutoria
-professor -right-> listar_tutorias_lecionadas
+professor -up-> disponibilizar_agendamento_tutoria
+professor -up-> visualizar_solicitacao_tutoria
+professor -up-> listar_tutorias_lecionadas
 
-professor --> emitir_certificado_conclusao_curso
-professor --> listar_certificados_emitidos_curso
-professor --> atualizar_perfil_professor
+professor -left-> emitir_certificado_conclusao_curso
+professor -left-> listar_certificados_emitidos_curso
 
-professor --> realizar_login
+professor -left-> realizar_login
 
-visualizar_perfil_professor .down.> atualizar_perfil_professor: <<extend>
+listar_cursos_ministrados .up.> visualizar_curso: <<extend>
 
-listar_cursos_ministrados .down.> visualizar_curso: <<extend>
+visualizar_curso <.up. listar_alunos_inscritos_curso: <<extend>
+visualizar_curso <.left. remover_curso: <<extend>
+visualizar_curso <.left. atualizar_curso: <<extend>
 
-visualizar_curso .down.> listar_alunos_inscritos_curso: <<extend>
-visualizar_curso .down.> visualizar_notas_alunos: <<extend>
-visualizar_curso .left.> remover_curso: <<extend>
-visualizar_curso .left.> atualizar_curso: <<extend>
+visualizar_curso <.left. listar_aulas_curso: <<extend>
 
-visualizar_curso .left.> listar_aulas_curso: <<extend>
+listar_aulas_curso <.down. visualizar_aula_curso: <<extend>
+listar_aulas_curso <.down. adicionar_aula_curso: <<extend>
 
-listar_aulas_curso .down.> visualizar_aula_curso: <<extend>
-listar_aulas_curso .down.> adicionar_aula_curso: <<extend>
+visualizar_aula_curso <.up. remover_aula_curso: <<extend>
+visualizar_aula_curso <.up. atualizar_aula_curso: <<extend>
 
-visualizar_aula_curso .right.> remover_aula_curso: <<extend>
-visualizar_aula_curso .right.> atualizar_aula_curso: <<extend>
-
-visualizar_solicitacao_tutoria .right.> aceitar_solicitacao_tutoria: <<extend>
-visualizar_solicitacao_tutoria .right.> recusar_solicitacao_tutoria: <<extend>
+visualizar_solicitacao_tutoria <.up. aceitar_solicitacao_tutoria: <<extend>
+visualizar_solicitacao_tutoria <.up. recusar_solicitacao_tutoria: <<extend>
 
 @enduml
