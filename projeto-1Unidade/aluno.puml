@@ -2,12 +2,14 @@
 left to right direction
 
 :Aluno: as aluno
+:Sistema: as sistema
 
 
 rectangle "Plataforma de Cursos de Idiomas Online"{
     (Visualizar Curso) as visualizar_curso
     (Visualizar Aula do Curso) as visualizar_aula_curso
     (Listar Aulas do Curso) as listar_aulas_curso
+    (Listar Cursos Inscritos) as listar_cursos_inscritos
 
     (Realizar Login) as realizar_login
 
@@ -36,6 +38,12 @@ aluno --> realizar_login
 
 aluno --> visualizar_cursos_disponiveis
 
+visualizar_cursos_disponiveis <.right. visualizar_curso: <<extend>
+
+aluno --> listar_cursos_inscritos
+
+listar_cursos_inscritos <.left. visualizar_curso: <<extend>
+
 aluno --> fazer_inscricao_curso
 aluno --> visualizar_curso
 
@@ -54,5 +62,7 @@ listar_certificados_adquiridos <.down. visualizar_certificado_curso: <<extend>
 
 aluno --> solicitar_tutoria
 aluno --> cancelar_solicitacao_tutoria
+
+sistema -up-> solicitar_certificado_curso
 
 @enduml

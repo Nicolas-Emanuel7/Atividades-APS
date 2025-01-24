@@ -32,23 +32,23 @@ rectangle "Plataforma de Cursos de Idiomas Online"{
     (Realizar Login) as realizar_login
 }
 
-professor -down-> fazer_cadastro_professor
-professor -down-> cadastrar_curso
-professor -down-> visualizar_curso
-professor -down-> listar_cursos_ministrados
+professor -up-> fazer_cadastro_professor
+professor -up-> cadastrar_curso
+professor -up-> visualizar_curso
+professor -up-> listar_cursos_ministrados
 
 professor -up-> disponibilizar_agendamento_tutoria
-professor -up-> visualizar_solicitacao_tutoria
-professor -up-> listar_tutorias_lecionadas
+professor -left-> visualizar_solicitacao_tutoria
+professor -left-> listar_tutorias_lecionadas
 
-professor -left-> emitir_certificado_conclusao_curso
-professor -left-> listar_certificados_emitidos_curso
+professor -up-> emitir_certificado_conclusao_curso
+professor -up-> listar_certificados_emitidos_curso
 
-professor -left-> realizar_login
+professor -up-> realizar_login
 
 listar_cursos_ministrados .up.> visualizar_curso: <<extend>
 
-visualizar_curso <.up. listar_alunos_inscritos_curso: <<extend>
+visualizar_curso <.down. listar_alunos_inscritos_curso: <<extend>
 visualizar_curso <.left. remover_curso: <<extend>
 visualizar_curso <.left. atualizar_curso: <<extend>
 
@@ -57,8 +57,8 @@ visualizar_curso <.left. listar_aulas_curso: <<extend>
 listar_aulas_curso <.down. visualizar_aula_curso: <<extend>
 listar_aulas_curso <.down. adicionar_aula_curso: <<extend>
 
-visualizar_aula_curso <.up. remover_aula_curso: <<extend>
-visualizar_aula_curso <.up. atualizar_aula_curso: <<extend>
+visualizar_aula_curso <.down. remover_aula_curso: <<extend>
+visualizar_aula_curso <.down. atualizar_aula_curso: <<extend>
 
 visualizar_solicitacao_tutoria <.up. aceitar_solicitacao_tutoria: <<extend>
 visualizar_solicitacao_tutoria <.up. recusar_solicitacao_tutoria: <<extend>
