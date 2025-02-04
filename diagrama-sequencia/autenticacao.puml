@@ -8,7 +8,7 @@ participant ControleBD as controle_bd
 participant Usuario as usuario
 database BancoDados as bd
 
-cliente -> tela_login: 1:realizarLogin()
+cliente -> tela_login: 1:realizarLogin(login: String, senha: String): Usuario
 activate tela_login
 
 tela_login -> controle_usuario: 1.1:autenticarUsuario(login: String, senha: String): Usuario
@@ -34,7 +34,9 @@ deactivate controle_bd
 
 controle_usuario -> usuario **: <<create>>
 activate usuario
+
 controle_usuario --> tela_login
 deactivate controle_usuario
+
 
 @enduml

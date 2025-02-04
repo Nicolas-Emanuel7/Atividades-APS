@@ -1,0 +1,83 @@
+@startuml "Solicitar Tutoria - Completo"
+hide footbox
+
+actor Aluno as aluno_ator
+participant TelaCurso as tela_curso
+participant ControleTutoria as controle_tutoria
+participant Tutor as tutor
+database BD as bd
+
+== Fluxo Principal ==
+aluno_ator -> tela_curso: acessarCurso()
+activate tela_curso
+
+tela_curso -> controle_tutoria: listarTutoresDisponiveis(id_curso)
+activate controle_tutoria
+
+controle_tutoria -> bd: buscarTutores(id_curso)
+activate bd
+bd --> controle_tutoria: listaTutores[]
+deactivate bd
+
+alt Tutor indisponível (E2)
+    controle_tutoria --> tela_curso: exibirMensagem("Tutor indisponível. Escolha outro.")
+else Tutor disponível
+    controle_tutoria --> tela_curso: exibirListaTutores()
+    aluno_ator -> tela_curso: selecionarTutor(id_tutor)
+    tela_curso -> controle_tutoria: listarHorariosDisponiveis(id_tutor)
+    
+    controle_tutoria -> bd: buscarHorarios(id_tutor)
+    activate bd
+    bd --> controle_tutoria: listaHorarios[]
+    deactivate bd
+
+    alt Horário indisponível (E1)
+        controle_tutoria --> tela_curso: exibirMensagem("Horário indisponível. Escolha outro.")
+    else Horário disponível
+        controle_tutoria --> tela_curso: exibirListaHorarios()
+        aluno_ator -> tela_curso: selecionarHorario(id_horario)
+        tela_curso -> controle_tutoria: confirmarAgendamento(id_tutor, id_horario)
+
+        controle_tutoria -> bd: registrarAgendamento(id_tutor, id_horario, id_aluno)
+        activate bd
+        bd --> controle_tutoria: sucesso()
+        deactivate bd
+
+        controle_tutoria --> tela_curso: exibirMensagem("Agendamento de tutoria enviado")
+        controle_tutoria --> aluno_ator: exibirDetalhesAgendamento()
+        controle_tutoria -> tutor: notificarAgendamento(id_tutor)
+    end
+end
+
+deactivate controle_tutoria
+deactivate tela_curso
+
+== Fluxo Alternativo A1: Cancelamento da Tutoria ==
+aluno_ator -> tela_curso: acessarAgendamentos()
+activate tela_curso
+
+tela_curso -> controle_tutoria: listarTutoriasAgendadas(id_aluno)
+activate controle_tutoria
+
+controle_tutoria -> bd: buscarAgendamentos(id_aluno)
+activate bd
+bd --> controle_tutoria: listaAgendamentos[]
+deactivate bd
+
+controle_tutoria --> tela_curso: exibirListaTutorias()
+aluno_ator -> tela_curso: selecionarTutoriaParaCancelar(id_tutoria)
+tela_curso -> controle_tutoria: cancelarTutoria(id_tutoria)
+
+controle_tutoria -> bd: removerAgendamento(id_tutoria)
+activate bd
+bd --> controle_tutoria: sucesso()
+deactivate bd
+
+controle_tutoria --> tela_curso: exibirMensagem("Tutoria cancelada com sucesso.")
+controle_tutoria --> aluno_ator: exibirDetalhesCancelamento()
+controle_tutoria -> tutor: notificarCancelamento(id_tutor)
+
+deactivate controle_tutoria
+deactivate tela_curso
+
+@enduml

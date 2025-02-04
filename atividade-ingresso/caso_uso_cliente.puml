@@ -1,0 +1,49 @@
+@startuml "Diagrama de Caso de Uso - Sistema de Compra de Ingressos"
+left to right direction
+
+:Cliente: as Cliente
+:Sistema de Pagamento: as Sistema
+
+rectangle "Sistema de Compra de Ingressos" {
+
+    (Solicitar Reembolso) as solicitar_reembolso
+    (Comprar Ingresso) as comprar_ingresso
+    (Validar Ingresso) as validar_ingresso
+    (Listar Eventos) as listar_eventos
+    (Buscar Evento) as buscar_evento
+    (Listar Ingressos) as listar_ingressos
+    (Visualizar Evento) as visualizar_evento
+    (Visualizar Ingresso) as visualizar_ingresso
+    (Baixar Ingresso) as baixar_ingresso
+    (Listar Lotes) as listar_lotes
+    (Visualizar Lote) as visualizar_lote
+    
+}
+
+Cliente --> listar_eventos
+Cliente --> buscar_evento
+listar_eventos <.right. buscar_evento: <<extend>>
+
+Cliente --> visualizar_evento
+
+listar_eventos <.right. visualizar_evento: <<extend>>
+buscar_evento <.right. visualizar_evento: <<extend>>
+
+visualizar_evento <.down. comprar_ingresso: <<extend>>
+
+Sistema --> comprar_ingresso
+
+visualizar_evento <.down. listar_lotes: <<extend>>
+listar_lotes <.down. visualizar_lote: <<extend>>
+visualizar_lote <.down. comprar_ingresso: <<extend>>
+
+Cliente --> listar_ingressos
+Cliente --> visualizar_ingresso
+
+listar_ingressos <.right. visualizar_ingresso: <<extend>>
+
+visualizar_ingresso <.down. solicitar_reembolso: <<extend>>
+visualizar_ingresso <.down. baixar_ingresso: <<extend>>
+visualizar_ingresso <.down. validar_ingresso: <<extend>>
+
+@enduml

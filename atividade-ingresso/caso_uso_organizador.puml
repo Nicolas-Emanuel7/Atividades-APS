@@ -1,0 +1,44 @@
+@startuml "Diagrama de Caso de Uso - Sistema de Compra de Ingressos"
+left to right direction
+
+:Organizador: as Organizador
+
+rectangle "Sistema de Compra de Ingressos" {
+
+    (Listar Eventos Organizados) as listar_eventos_organizados
+    (Visualizar Ingresso) as visualizar_ingresso
+    (Gerenciar Ingressos) as gerenciar_ingressos
+
+    (Listar lotes) as listar_lotes
+
+    (Gerenciar Local) as gerenciar_local
+    (Gerenciar Lote) as gerenciar_lote
+
+    (Listar Clientes) as listar_clientes
+
+    (Cancelar Evento) as cancelar_evento
+    (Adiar Evento) as adiar_evento
+    (Gerenciar Evento) as gerenciar_evento
+}
+
+Organizador --> listar_eventos_organizados
+Organizador --> gerenciar_evento
+
+listar_eventos_organizados <.right. gerenciar_evento: <<extend>>
+
+gerenciar_evento <.down. cancelar_evento: <<extend>>
+gerenciar_evento <.down. adiar_evento: <<extend>>
+
+gerenciar_evento <.down. listar_lotes: <<extend>>
+
+listar_lotes <.down. gerenciar_lote: <<extend>>
+
+gerenciar_evento <.down. gerenciar_local: <<include>>
+
+gerenciar_evento <.down. listar_clientes: <<extend>>
+
+gerenciar_evento <.left. gerenciar_ingressos: <<include>>
+
+gerenciar_ingressos <.down. visualizar_ingresso: <<extend>>
+
+@enduml

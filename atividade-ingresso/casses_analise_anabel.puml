@@ -1,0 +1,172 @@
+@startuml "Diagrama BCE - Sistema de Compra de Ingressos"
+left to right direction
+skinparam backgroundColor #f0f0f0
+skinparam packageStyle rectangle
+skinparam classAttributeIconSize 16
+
+
+package "Boundary"{
+    skinparam backgroundColor #e6dddf
+
+    class InterfaceOrganizador {
+        +gerenciarLotes()
+        +gerenciarLocais()
+        +gerenciarEventos()
+        +gerenciarClientes()
+    }
+
+    class InterfaceCliente {
+        +visualizarEvento()
+        +buscarEvento()
+        +listarEventos()
+
+        +visualizarIngresso()
+        +pagarIngresso()
+        +listarIngressos()
+        +baixarIngresso()
+
+        +visualizarLotes()
+        +PedirReembolso()
+    }
+
+    class InterfaceSistemaPagamento {
+        +validarPagamento()
+    }
+}
+
+package "Control" {
+    skinparam backgroundColor #fff9e6
+    class ControleEventos {
+        +cadastrarEvento()
+        +atualizarEvento()
+        +removerEvento()
+        +listarEventos()
+        +visualizarEvento()
+    }
+
+    class ControleIngressos {
+        +realizarCompra()
+        +solicitarReembolso()
+        +validarIngresso()
+
+    }
+
+    class ControleLotes {
+        +adicionarLote()
+        +removerLote()
+        +listarLotes()
+        +visualizarLote()
+        +atualizarLote()
+
+    }
+
+    class ControleLocais {
+        +cadastrarLocal()
+        +removerLocal()
+        +listarLocais()
+        +atualizarLocal()
+
+    }
+
+    class ControleClientes {
+        +cadastrarCliente()
+        +listarClientes()
+    }
+
+    class ControleOrganizador {
+        +cadastrarOrganizador()
+    }
+}
+
+package "Entity" {
+    skinparam backgroundColor #f9f9f9
+    class Evento {
+        -id_evento: int
+        -id_local: int
+        -nome: String
+        -data: Date
+        -tipo: String
+        -ingressos_vendidos: int
+        -situacao: String
+        -motivo_situacao: String
+        -id_organizador: int
+        -data_inicio: Date
+        -data_fim: Date
+    }
+
+    class Ingresso {
+        -id_ingresso: int
+        -id_cliente: int
+        -id_lote: int
+        -id_evento: int
+        -valor: double
+        -data_emissao: Date
+        -setor: String
+        -situacao: String
+    }
+
+    class Cliente {
+        -id_cliente: int
+        -nome: String
+        -email: String
+        -telefone: String
+        -cpf: String
+    }
+
+    class Lote {
+        -id_lote: int
+        -id_evento: int
+        -valor: double
+        -quantidade_ingressos: int
+    }
+
+    class Local {
+        -id_local: int
+        -nome: String
+        -endereco: String
+        -capacidade_max: int
+        -tipo: String
+    }
+
+
+    class Organizador {
+        -id_organizador: int
+        -nome: String
+        -telefone: String
+        -email: String
+        -cpf: String
+        -cnpj: String
+    }
+}
+
+' Relacionamentos
+
+InterfaceCliente --> ControleIngressos
+InterfaceCliente --> ControleEventos
+InterfaceCliente --> ControleLotes
+InterfaceCliente --> InterfaceSistemaPagamento
+
+InterfaceOrganizador --> ControleEventos
+InterfaceOrganizador --> ControleLotes
+InterfaceOrganizador --> ControleLocais
+InterfaceOrganizador --> ControleClientes
+InterfaceOrganizador --> ControleOrganizador
+
+InterfaceSistemaPagamento --> ControleIngressos : "<<include>>"
+
+ControleEventos --> Evento
+ControleIngressos --> Ingresso
+ControleIngressos --> Cliente
+ControleIngressos --> Lote
+ControleLotes --> Lote
+ControleLocais --> Local
+ControleClientes --> Cliente
+ControleOrganizador --> Organizador
+
+Evento --> Organizador
+Evento --> Local
+Evento --> Lote
+Ingresso --> Cliente
+Ingresso --> Lote
+
+@enduml

@@ -1,0 +1,157 @@
+@startuml "Diagrama BCE - Sistema de Compra de Ingressos"
+left to right direction
+
+package "Boundary" {
+    class InterfaceCliente {
+        comprarIngresso()
+        listarEventos()
+        visualizarEvento()
+        visualizarIngresso()
+        listarIngressos()
+        visualizarLote()
+        baixarIngresso()
+        solicitarReembolso()
+        validarIngresso()
+    }
+    
+    class InterfaceOrganizador {
+        gerenciarEventos()
+        gerenciarLotes()
+        gerenciarLocais()
+        gerenciarClientes()
+    }
+
+    class InterfaceSistemaPagamento {
+        processarPagamento()
+    }
+}
+
+package "Control" {
+    class ControladorDeEventos {
+        cadastrarEvento()
+        atualizarEvento()
+        removerEvento()
+        listarEventos()
+        visualizarEvento()
+    }
+
+    class ControladorDeIngressos {
+        realizarCompra()
+        validarIngresso()
+        solicitarReembolso()
+    }
+    
+    class ControladorDeLotes {
+        adicionarLote()
+        atualizarLote()
+        removerLote()
+        listarLotes()
+        visualizarLote()
+    }
+
+    class ControladorDeLocais {
+        cadastrarLocal()
+        atualizarLocal()
+        removerLocal()
+        listarLocais()
+    }
+
+    class ControladorDeClientes {
+        cadastrarCliente()
+        listarClientes()
+    }
+
+    class ControladorDeOrganizadores {
+        cadastrarOrganizador()
+    }
+}
+
+package "Entity" {
+    class Evento {
+        id_evento
+        nome
+        id_local
+        data
+        tipo
+        ingressos_vendidos
+        situacao
+        motivo_situacao
+        id_organizador
+        data_inicio
+        data_fim
+    }
+    
+    class Ingresso {
+        id_ingresso
+        valor
+        id_evento
+        id_cliente
+        id_lote
+        data_emissao
+        setor
+        situacao
+    }
+
+    class Lote {
+        id_lote
+        id_evento
+        quantidade_ingressos
+        valor
+    }
+    
+    class Local {
+        id_local
+        nome
+        endereco
+        capacidade_max
+        tipo
+    }
+
+    class Cliente {
+        id_cliente
+        nome
+        email
+        telefone
+        cpf
+    }
+
+    class Organizador {
+        id_organizador
+        nome
+        email
+        telefone
+        cpf
+        cnpj
+    }
+}
+
+' Relacionamentos
+InterfaceCliente --> ControladorDeIngressos
+InterfaceCliente --> ControladorDeEventos
+InterfaceCliente --> ControladorDeLotes
+InterfaceCliente --> InterfaceSistemaPagamento
+
+InterfaceOrganizador --> ControladorDeEventos
+InterfaceOrganizador --> ControladorDeLotes
+InterfaceOrganizador --> ControladorDeLocais
+InterfaceOrganizador --> ControladorDeClientes
+InterfaceOrganizador --> ControladorDeOrganizadores
+
+InterfaceSistemaPagamento --> ControladorDeIngressos : "<<include>>"
+
+ControladorDeEventos --> Evento
+ControladorDeIngressos --> Ingresso
+ControladorDeIngressos --> Cliente
+ControladorDeIngressos --> Lote
+ControladorDeLotes --> Lote
+ControladorDeLocais --> Local
+ControladorDeClientes --> Cliente
+ControladorDeOrganizadores --> Organizador
+
+Evento -right-> Organizador : "organizado por"
+Evento -right-> Local : "ocorre em"
+Evento -right-> Lote : "possui"
+Ingresso -right-> Cliente : "pertence a"
+Ingresso -right-> Lote : "pertence a"
+
+@enduml

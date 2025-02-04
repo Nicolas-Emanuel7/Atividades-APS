@@ -1,0 +1,80 @@
+@startuml "Fazer Inscrição em Curso - Correto"
+hide footbox
+
+actor Aluno as aluno_ator
+participant TelaCursosDisponiveis as tela_cursos
+participant TelaCursoSelecionado as tela_curso_selecionado
+participant ControleInscricao as controle_inscricao
+participant Curso as curso
+database BD as bd
+
+aluno_ator -> tela_cursos: acessarCursosDisponiveis()
+activate tela_cursos
+
+tela_cursos -> controle_inscricao: selecionarCurso(id_curso)
+activate controle_inscricao
+
+controle_inscricao -> bd: verificarDisponibilidade(id_curso)
+activate bd
+
+alt Curso indisponível (E1)
+    bd --> controle_inscricao: cursoNaoDisponivel()
+
+    activate tela_cursos
+    controle_inscricao --> tela_cursos: exibirMensagem("Curso indisponível")
+    deactivate tela_cursos
+
+else Curso disponível
+    bd --> controle_inscricao: cursoDisponivel()
+    deactivate bd
+    controle_inscricao --> tela_cursos: permitirAcessoCurso()
+    deactivate controle_inscricao
+end
+    
+
+tela_cursos -> tela_curso_selecionado: acessarCurso(id_curso)
+activate tela_curso_selecionado
+
+tela_curso_selecionado -> controle_inscricao: solicitarInscricao(id_aluno, id_curso)
+activate controle_inscricao
+
+controle_inscricao -> bd: verificarVagas(id_curso)
+activate bd
+
+alt Curso sem vagas (A1)
+    bd --> controle_inscricao: semVagas()
+
+    activate tela_curso_selecionado
+    controle_inscricao --> tela_curso_selecionado: exibirMensagem("Vagas esgotadas. Escolha outro curso.")
+    deactivate tela_curso_selecionado
+    
+    
+else Vagas disponíveis
+    bd --> controle_inscricao: vagasDisponiveis()
+    deactivate controle_inscricao
+    deactivate bd
+
+    tela_curso_selecionado -> controle_inscricao: confirmarInscricao(id_aluno, id_curso)
+    activate controle_inscricao
+
+    controle_inscricao -> bd: registrarInscricao(id_aluno, id_curso)
+    activate bd
+
+    alt Erro no registro (E2)
+        bd --> controle_inscricao: erro()
+
+        controle_inscricao --> tela_curso_selecionado: exibirMensagem("Erro ao inscrever-se. Tente novamente.")
+    else Sucesso na inscrição
+        bd --> controle_inscricao: sucesso()
+        deactivate bd
+        controle_inscricao --> tela_curso_selecionado: exibirMensagem("Inscrição Concluída")
+        deactivate controle_inscricao
+    end
+
+    
+end
+
+deactivate tela_curso_selecionado
+deactivate tela_cursos
+
+@enduml

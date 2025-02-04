@@ -1,0 +1,68 @@
+@startuml "Solicitar Certificado de Conclusão de Curso - Atualizado"
+hide footbox
+
+actor Aluno as aluno_ator
+participant TelaCurso as tela_curso
+participant ControleCertificado as controle_certificado
+participant Certificado as certificado
+database BD as bd
+
+aluno_ator -> tela_curso: acessarCursoConcluido()
+activate tela_curso
+
+tela_curso -> controle_certificado: solicitarCertificado(id_aluno, id_curso)
+activate controle_certificado
+
+controle_certificado -> bd: verificarConclusao(id_aluno, id_curso)
+activate bd
+bd --> controle_certificado: statusConclusao(boolean)
+deactivate bd
+
+controle_certificado -> controle_certificado: validarRequisitos()
+
+alt Requisitos não atendidos (A1)
+
+    activate tela_curso
+    controle_certificado --> tela_curso: exibirMensagem("Requisitos pendentes")
+    deactivate tela_curso
+
+    
+else Requisitos atendidos
+    controle_certificado -> certificado **: <<create>>
+    activate certificado
+
+    controle_certificado -> bd: salvarCertificado(id_aluno, id_curso)
+    activate bd
+
+    alt Falha na geração (E1)
+        bd --> controle_certificado: erro()
+        
+        activate tela_curso
+        controle_certificado --> tela_curso: exibirMensagem("Erro ao gerar certificado. Tente novamente.")
+        deactivate tela_curso
+        
+    else Sucesso na geração
+        bd --> controle_certificado: sucesso()
+        deactivate bd
+        controle_certificado --> tela_curso: exibirCertificado()
+
+        alt Baixar Certificado (A2)
+            aluno_ator -> tela_curso: selecionarOpcao("Baixar Certificado")
+            activate tela_curso
+
+            tela_curso -> controle_certificado: emitirPDF(id_certificado)
+            activate controle_certificado
+
+            controle_certificado --> aluno_ator: fornecerDownload("Certificado.pdf")
+            deactivate controle_certificado
+
+            deactivate tela_curso
+        end
+    end
+end
+
+deactivate controle_certificado
+deactivate certificado
+deactivate tela_curso
+
+@enduml

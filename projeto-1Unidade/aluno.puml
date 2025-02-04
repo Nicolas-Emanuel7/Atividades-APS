@@ -2,7 +2,6 @@
 left to right direction
 
 :Aluno: as aluno
-:Sistema: as sistema
 
 
 rectangle "Plataforma de Cursos de Idiomas Online"{
@@ -62,7 +61,5 @@ listar_certificados_adquiridos <.down. visualizar_certificado_curso: <<extend>
 
 aluno --> solicitar_tutoria
 aluno --> cancelar_solicitacao_tutoria
-
-sistema -up-> solicitar_certificado_curso
 
 @enduml
