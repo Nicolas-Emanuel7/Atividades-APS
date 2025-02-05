@@ -1,0 +1,97 @@
+@startuml "Modelo de Classes - Professor"
+left to right direction
+
+abstract class Usuario {
+    -id: String
+    -nome: String
+    -email: String
+    -senha: String
+}
+
+class Professor <<entity>> {
+    -id: String
+    -cursosMinistrados: List<Curso>
+    +cadastrarCurso(curso: Curso): boolean
+    +removerCurso(curso: Curso): boolean
+    +atualizarCurso(curso: Curso): boolean
+    +adicionarAula(curso: Curso, aula: Aula): boolean
+    +removerAula(aula: Aula): boolean
+    +atualizarAula(aula: Aula): boolean
+    +disponibilizarTutoria(horarios: List<Date>): boolean
+    +aceitarTutoria(tutoria: Tutoria): boolean
+    +recusarTutoria(tutoria: Tutoria): boolean
+    +emitirCertificado(aluno: Aluno, curso: Curso): Certificado
+}
+
+class Curso <<entity>> {
+    -id: String
+    -titulo: String
+    -descricao: String
+    -aulas: List<Aula>
+    -certificadosEmitidos: List<Certificado>
+    +listarAulas(): List<Aula>
+}
+
+class Aula <<entity>> {
+    -id: String
+    -titulo: String
+    -conteudo: String
+    -duracao: int
+    -curso: Curso
+}
+
+class Tutoria <<entity>> {
+    -id: String
+    -aluno: Aluno
+    -professor: Professor
+    -horario: Date
+    -status: String
+}
+
+class Certificado <<entity>> {
+    -id: String
+    -aluno: Aluno
+    -curso: Curso
+    -dataEmissao: Date
+    +emitir(): boolean
+}
+
+class ControleProfessor {
+    +cadastrarProfessor(professor: Professor): boolean
+    +realizarLogin(email: String, senha: String): boolean
+    +listarCursosMinistrados(professor: Professor): List<Curso>
+}
+
+class ControleCurso {
+    +cadastrarCurso(professor: Professor, curso: Curso): boolean
+    +removerCurso(professor: Professor, curso: Curso): boolean
+    +atualizarCurso(professor: Professor, curso: Curso): boolean
+    +listarAlunosInscritos(curso: Curso): List<Aluno>
+}
+
+class ControleTutoria {
+    +disponibilizarAgendamento(professor: Professor, horarios: List<Date>): boolean
+    +visualizarSolicitacoes(professor: Professor): List<Tutoria>
+    +aceitarSolicitacao(tutoria: Tutoria): boolean
+    +recusarSolicitacao(tutoria: Tutoria): boolean
+}
+
+class ControleCertificado {
+    +emitirCertificado(professor: Professor, aluno: Aluno, curso: Curso): Certificado
+    +listarCertificadosEmitidos(curso: Curso): List<Certificado>
+}
+
+Professor --|> Usuario
+Professor "1" -- "0..*" Curso: < Leciona
+Professor "1" -- "0..*" Tutoria: < Oferece
+Professor "1" -- "0..*" Certificado: < Emite
+Curso "1" -- "1..*" Aula: < Contém
+Curso "1" -- "0..*" Certificado: < Gera
+Tutoria "1" -- "1" Aluno: < Relacionado
+
+ControleProfessor -- Professor: < Gerencia
+ControleCurso -- Curso: < Gerencia
+ControleTutoria -- Tutoria: < Gerencia
+ControleCertificado -- Certificado: < Gerencia
+
+@enduml

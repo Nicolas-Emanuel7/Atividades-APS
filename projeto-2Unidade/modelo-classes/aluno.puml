@@ -1,0 +1,94 @@
+@startuml "Modelo de Classes - Aluno"
+left to right direction
+
+abstract class Usuario {
+    -id: String
+    -nome: String
+    -email: String
+    -senha: String
+}
+
+class Aluno <<entity>> {
+    -matricula: String
+    -cursosInscritos: List<Curso>
+    +inscreverCurso(curso: Curso): boolean
+    +cancelarInscricao(curso: Curso): boolean
+    +solicitarCertificado(curso: Curso): Certificado
+    +solicitarTutoria(curso: Curso): Tutoria
+}
+
+class Curso <<entity>> {
+    -id: String
+    -titulo: String
+    -descricao: String
+    -professor: Professor
+    -aulas: List<Aula>
+    -certificado: Certificado
+    +listarAulas(): List<Aula>
+    +buscarAula(id_aula: String): Aula
+}
+
+class Aula <<entity>> {
+    -id: String
+    -titulo: String
+    -conteudo: String
+    -duracao: int
+    -curso: Curso
+    +assistir(): boolean
+}
+
+class Certificado <<entity>> {
+    -id: String
+    -aluno: Aluno
+    -curso: Curso
+    -dataEmissao: Date
+    +gerarCertificado(): boolean
+    +baixarCertificado(): File
+}
+
+class Tutoria <<entity>> {
+    -id: String
+    -aluno: Aluno
+    -professor: Professor
+    -horario: Date
+    -status: String
+    +solicitarTutoria(): boolean
+    +cancelarTutoria(): boolean
+}
+
+class ControleAluno {
+    +realizarCadastro(aluno: Aluno): boolean
+    +realizarLogin(email: String, senha: String): boolean
+}
+
+class ControleCurso {
+    +listarCursosDisponiveis(): List<Curso>
+    +buscarCurso(id_curso: String): Curso
+    +inscreverAluno(aluno: Aluno, curso: Curso): boolean
+    +cancelarInscricao(aluno: Aluno, curso: Curso): boolean
+}
+
+class ControleTutoria {
+    +listarTutoresDisponiveis(curso: Curso): List<Professor>
+    +solicitarTutoria(aluno: Aluno, professor: Professor, horario: Date): Tutoria
+    +cancelarTutoria(tutoria: Tutoria): boolean
+}
+
+class ControleCertificado {
+    +emitirCertificado(aluno: Aluno, curso: Curso): Certificado
+    +baixarCertificado(certificado: Certificado): File
+}
+
+Aluno --|> Usuario
+Aluno "1" -- "0..*" Curso: < Inscrito
+Curso "1" -- "1..*" Aula: < Possui
+Curso "1" -- "1" Certificado: < Gera
+Aluno "0..*" -- "1" Certificado: < Recebe
+Aluno "0..*" -- "1" Tutoria: < Solicita
+
+ControleAluno -- Aluno: < Gerencia
+ControleCurso -- Curso: < Gerencia
+ControleTutoria -- Tutoria: < Gerencia
+ControleCertificado -- Certificado: < Gerencia
+
+@enduml
