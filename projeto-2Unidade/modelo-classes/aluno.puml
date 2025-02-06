@@ -11,10 +11,14 @@ abstract class Usuario {
 class Aluno <<entity>> {
     -matricula: String
     -cursosInscritos: List<Curso>
-    +inscreverCurso(curso: Curso): boolean
-    +cancelarInscricao(curso: Curso): boolean
-    +solicitarCertificado(curso: Curso): Certificado
-    +solicitarTutoria(curso: Curso): Tutoria
+    -tutoriasSolicitadas: List<Tutoria>
+    -certificados: List<Certificado>
+    -aulasAssistidas: List<Aula>
+}
+
+class Professor <<entity>> {
+    -cursosMinistrados: List<Curso>
+    -tutorias: List<Tutoria>
 }
 
 class Curso <<entity>> {
@@ -23,9 +27,10 @@ class Curso <<entity>> {
     -descricao: String
     -professor: Professor
     -aulas: List<Aula>
+    -idioma: String
+    -duracao: int
+    -alunosCadastrados: List<Aluno>
     -certificado: Certificado
-    +listarAulas(): List<Aula>
-    +buscarAula(id_aula: String): Aula
 }
 
 class Aula <<entity>> {
@@ -34,7 +39,6 @@ class Aula <<entity>> {
     -conteudo: String
     -duracao: int
     -curso: Curso
-    +assistir(): boolean
 }
 
 class Certificado <<entity>> {
@@ -42,8 +46,6 @@ class Certificado <<entity>> {
     -aluno: Aluno
     -curso: Curso
     -dataEmissao: Date
-    +gerarCertificado(): boolean
-    +baixarCertificado(): File
 }
 
 class Tutoria <<entity>> {
@@ -52,13 +54,27 @@ class Tutoria <<entity>> {
     -professor: Professor
     -horario: Date
     -status: String
-    +solicitarTutoria(): boolean
-    +cancelarTutoria(): boolean
 }
 
 class ControleAluno {
-    +realizarCadastro(aluno: Aluno): boolean
+    +realizarCadastro(*args): Aluno
+    +atualizarDados(*args): Aluno
     +realizarLogin(email: String, senha: String): boolean
+}
+
+class ControleProfessor {
+    +realizarCadastro(*args): Professor
+    +atualizarDados(*args): Professor
+    +realizarLogin(email: String, senha: String): boolean
+}
+
+class ControleAula {
+    +assistirAula(aluno: Aluno, aula: Aula): boolean
+    +listarAulasDisponiveis(id_curso: String): List<Aula>
+    +listarAulasAssistidas(id_aluno: String): List<Aula>
+    +cadastrarAula(*args): Aula
+    +atualizarAula(*args): Aula
+    +excluirAula(id_aula: String): boolean
 }
 
 class ControleCurso {
@@ -66,29 +82,46 @@ class ControleCurso {
     +buscarCurso(id_curso: String): Curso
     +inscreverAluno(aluno: Aluno, curso: Curso): boolean
     +cancelarInscricao(aluno: Aluno, curso: Curso): boolean
+    +cadastrarCurso(*args): Curso
+    +atualizarCurso(*args): Curso
+    +excluirCurso(id_curso: String): boolean
+    +listarAlunosCadastrados(id_curso: String): List<Aluno>
 }
 
 class ControleTutoria {
-    +listarTutoresDisponiveis(curso: Curso): List<Professor>
-    +solicitarTutoria(aluno: Aluno, professor: Professor, horario: Date): Tutoria
-    +cancelarTutoria(tutoria: Tutoria): boolean
+    +listarTutoresDisponiveis(id_curso: String): List<Professor>
+    +solicitarTutoria(id_aluno: String, id_professor: String, horario: Date): Tutoria
+    +cancelarTutoria(id_tutoria): boolean
+    +listarTutoriasAluno(id_aluno: String): List<Tutoria>
+    +listarTutoriasProfessor(id_professor: String): List<Tutoria>
 }
 
 class ControleCertificado {
-    +emitirCertificado(aluno: Aluno, curso: Curso): Certificado
-    +baixarCertificado(certificado: Certificado): File
+    +emitirCertificado(id_aluno: String, id_curso: String): Certificado
+    +baixarCertificado(id_certificado: String): File
+    +listarCertificadosAluno(id_aluno: String): List<Certificado>
 }
 
 Aluno --|> Usuario
-Aluno "1" -- "0..*" Curso: < Inscrito
-Curso "1" -- "1..*" Aula: < Possui
-Curso "1" -- "1" Certificado: < Gera
-Aluno "0..*" -- "1" Certificado: < Recebe
-Aluno "0..*" -- "1" Tutoria: < Solicita
+Professor --|> Usuario
 
-ControleAluno -- Aluno: < Gerencia
-ControleCurso -- Curso: < Gerencia
-ControleTutoria -- Tutoria: < Gerencia
-ControleCertificado -- Certificado: < Gerencia
+Professor "1" -- "0..*" Curso: < Ministra
+Certificado "1" -- "1" Curso: < Emitido
+Aluno "0..*" -- "0..*" Curso: < Inscrito
+
+Aluno "1..*" -- "0..*" Tutoria: < Solicita
+Professor "1*" -- "0..*" Tutoria: < Participa
+
+Aluno "0..*" -- "0..*" Aula: < Assiste
+Professor "0..*" -- "0..*" Aula: < Cadastra
+
+Aluno "1*" -- "0..*" Certificado: < Possui
+
+ControleAluno -- Aluno: Controla >
+ControleCurso -- Curso: Controla >
+ControleTutoria -- Tutoria: Controla >
+ControleCertificado -- Certificado: Controla >
+ControleProfessor -- Professor: Controla >
+ControleAula -- Aula: Controla >
 
 @enduml
