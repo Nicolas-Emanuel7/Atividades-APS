@@ -189,6 +189,8 @@ class TelaListaCertificado{
 
 
 Aluno --|> Usuario
+
+Aluno --|> Usuario
 Professor --|> Usuario
 
 Professor "1" -- "0..*" Curso: < Ministra
