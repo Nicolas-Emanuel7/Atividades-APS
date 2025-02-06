@@ -187,9 +187,6 @@ class TelaListaCertificado{
     -selecionarCertificado(id_certificado: String): void
 }
 
-
-Aluno --|> Usuario
-
 Aluno --|> Usuario
 Professor --|> Usuario
 
@@ -211,5 +208,18 @@ ControleTutoria -- Tutoria: Controla >
 ControleCertificado -- Certificado: Controla >
 ControleProfessor -- Professor: Controla >
 ControleAula -- Aula: Controla >
+
+TelaCurso -- ControleCurso: Solicita >
+TelaListaCurso -- ControleCurso: Solicita >
+TelaAula -- ControleAula: Solicita >
+TelaListaAula -- ControleAula: Solicita >
+TelaAluno -- ControleAluno: Solicita >
+TelaListaAluno -- ControleAluno: Solicita >
+TelaProfessor -- ControleProfessor: Solicita >
+TelaListaProfessor -- ControleProfessor: Solicita >
+TelaTutoria -- ControleTutoria: Solicita >
+TelaListaTutoria -- ControleTutoria: Solicita >
+TelaCertificado -- ControleCertificado: Solicita >
+TelaListaCertificado -- ControleCertificado: Solicita >
 
 @enduml
