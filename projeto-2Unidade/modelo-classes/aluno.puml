@@ -102,6 +102,92 @@ class ControleCertificado {
     +listarCertificadosAluno(id_aluno: String): List<Certificado>
 }
 
+class TelaCurso {
+    -campo_titulo: String
+    -campo_descricao: String
+    -campo_professor: String
+    -campo_aulas: String []
+    -campo_idioma: String
+    -campo_duracao: int
+    -campo_alunosCadastrados: String []
+    -botao_enviar: Button
+    +enviar(*args): String
+}
+
+class TelaListaCurso{
+    -selecionarCurso(id_curso: String): void
+}
+
+class TelaAula {
+    -campo_titulo: String
+    -campo_conteudo: String
+    -campo_duracao: int
+    -campo_curso: String
+    -botao_enviar: Button
+    +enviar(*args): String
+}
+
+class TelaListaAula{
+    -selecionarAula(id_aula: String): void
+}
+
+class TelaAluno {
+    -campo_nome: String
+    -campo_email: String
+    -campo_senha: String
+    -campo_matricula: String
+    -campo_cursosInscritos: String []
+    -campo_tutoriasSolicitadas: String []
+    -campo_certificados: String []
+    -campo_aulasAssistidas: String []
+    -botao_enviar: Button
+    +enviar(*args): String
+}
+
+class TelaListaAluno{
+    -selecionarAluno(id_aluno: String): void
+}
+
+class TelaProfessor {
+    -campo_nome: String
+    -campo_email: String
+    -campo_senha: String
+    -campo_cursosMinistrados: String []
+    -campo_tutorias: String []
+    -botao_enviar: Button
+    +enviar(*args): String
+}
+
+class TelaListaProfessor{
+    -selecionarProfessor(id_professor: String): void
+}
+
+class TelaTutoria {
+    -campo_aluno: String
+    -campo_professor: String
+    -campo_horario: Date
+    -campo_status: String
+    -botao_enviar: Button
+    +enviar(*args): String
+}
+
+class TelaListaTutoria{
+    -selecionarTutoria(id_tutoria: String): void
+}
+
+class TelaCertificado {
+    -campo_aluno: String
+    -campo_curso: String
+    -campo_dataEmissao: Date
+    -botao_enviar: Button
+    +enviar(*args): String
+}
+
+class TelaListaCertificado{
+    -selecionarCertificado(id_certificado: String): void
+}
+
+
 Aluno --|> Usuario
 Professor --|> Usuario
 
