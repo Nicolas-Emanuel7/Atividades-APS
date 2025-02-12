@@ -1,0 +1,25 @@
+@startuml "Diagrama de Estados - Ciclo de Vida de um Livro Emprestado"
+
+Disponível: entry/notificar(biblioteca)
+Reservado: entry/notificar(biblioteca)
+Emprestado: entry/notificar(usuário)
+Atrasado: entry/notificar(usuário)
+Devolvido: entry/notificar(biblioteca)
+EmManutenção: entry/notificar(biblioteca)
+
+[*] --> Disponível
+
+Disponível --> Reservado: Reserva realizada/reservar(livro)
+Reservado --> Disponível: Prazo de retirada expirado/liberar(livro)
+Reservado --> Emprestado: Retirada realizada/emprestar(livro)
+Emprestado --> Atrasado: Prazo de devolução expirado/notificar(atraso)
+Emprestado --> Devolvido: Livro devolvido no prazo/devolver(livro)
+Atrasado --> Devolvido: Livro devolvido após prazo/devolver(livro)
+Devolvido --> EmManutenção: Avaliação exige reparo/encaminhar(manutenção)
+Devolvido --> Disponível: Avaliação aprovada/liberar(livro)
+EmManutenção --> Disponível: Manutenção concluída/liberar(livro)
+
+Devolvido --> [*]
+EmManutenção --> [*]
+
+@enduml
