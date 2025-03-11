@@ -1,0 +1,59 @@
+@startuml
+hide footbox
+actor Paciente as paciente
+participant "Tela Lista Especialidades" as tela_especialidades
+participant "Tela Especialidade" as tela_especialidade
+participant "Sistema" as sistema
+participant "Prontuário" as prontuario
+
+== Fluxo Básico de Eventos ==
+
+paciente -> tela_especialidades: Acessa lista de especialidades
+activate tela_especialidades
+tela_especialidades -> sistema: Busca especialidades
+activate sistema
+sistema -> tela_especialidades: retorna lista de especialidades
+deactivate sistema
+tela_especialidades -> paciente: Exibe lista de especialidades
+paciente -> tela_especialidades: Seleciona especialidade
+tela_especialidades -> tela_especialidade: Exibe especialidade selecionada
+activate tela_especialidade
+tela_especialidade -> sistema: Busca médicos da especialidade
+activate sistema
+sistema -> tela_especialidade: Retorna lista de médicos
+deactivate sistema
+tela_especialidade -> paciente: Exibe lista de médicos
+paciente -> tela_especialidade: Seleciona médico
+tela_especialidade -> sistema: busca médico selecionado
+activate sistema
+sistema -> tela_especialidade: Retorna médico selecionado
+deactivate sistema
+paciente -> tela_especialidade: Seleciona data para consulta
+tela_especialidade -> sistema: Verifica disponibilidade do médico [A1]
+activate sistema
+sistema -> tela_especialidade: Retorna disponibilidade
+deactivate sistema
+
+alt Horário Disponível
+    tela_especialidade -> sistema: Cria consulta com data e médico selecionado [S1]
+    activate sistema
+    sistema -> prontuario: Adiciona consulta ao prontuário
+    sistema -> paciente: Exibe mensagem "Consulta agendada com sucesso!"
+    deactivate sistema
+else Horário Indisponível
+    sistema -> paciente: Exibe mensagem "Horário indisponível"
+    paciente -> tela_especialidade: Seleciona outra data
+    tela_especialidade -> sistema: Verifica disponibilidade do médico [A1]
+end
+
+== Subfluxo [S1] Confirmar Consulta ==
+
+sistema -> tela_especialidade: Exibe mensagem "Deseja confirmar a consulta?"
+paciente -> tela_especialidade: Confirma consulta
+tela_especialidade -> sistema: Confirma consulta
+activate sistema
+sistema -> prontuario: Adiciona consulta ao prontuário
+sistema -> paciente: Exibe mensagem "Consulta agendada com sucesso!"
+deactivate sistema
+
+@enduml

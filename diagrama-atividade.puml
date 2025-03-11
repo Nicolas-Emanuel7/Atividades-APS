@@ -1,0 +1,30 @@
+@startuml "Fluxo de Emissão de Certificado"
+
+start
+
+:Aluno autenticado acessa o sistema;
+:Aluno acessa a página do curso concluído;
+:Aluno seleciona "Emitir Certificado";
+
+if (Aluno concluiu todas as aulas e atingiu progresso mínimo?) then (Sim)
+    :Sistema gera o certificado;
+    if (Certificado gerado com sucesso?) then (Sim)
+        :Sistema emite o certificado;
+        :Aluno visualiza o certificado;
+
+     
+        :Aluno pode selecionar "Baixar Certificado";
+        :Sistema disponibiliza o certificado em PDF para download;
+
+    else (Não)
+        :Sistema exibe mensagem de erro;
+        :Aluno é instruído a tentar novamente ou contatar o suporte;
+    endif
+else (Não)
+    :Sistema exibe os requisitos pendentes;
+    :Aluno visualiza os critérios a serem cumpridos;
+    :Aluno pode retornar às aulas para concluir pendências;
+endif
+
+stop
+@enduml

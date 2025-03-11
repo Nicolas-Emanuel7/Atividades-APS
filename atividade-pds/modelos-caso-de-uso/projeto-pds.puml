@@ -1,0 +1,45 @@
+@startuml "Diagrama de Caso de Uso"
+left to right direction
+
+:usuario_autenticado: as "Usuario Autenticado"
+:usuario_nao_autenticado: as "Usuario Não Autenticado"
+
+rectangle "Diagrama de Casos de Uso" {
+
+    (Assistir Aula) as assistir_aula
+    (Ler Artigo) as ler_artigo
+    (Responder Atividade) as responder_atividade
+    (Fazer Comentário) as fazer_comentario
+    
+    (Realizar Login) as realizar_login
+    (Fazer Cadastro) as fazer_cadastro
+
+    (Acompanhar Progresso Pessoal) as acompanhar_progresso_pessoal
+
+    (Fazer Download) as fazer_download
+
+    (Gerenciar Aula Própria) as gerenciar_aula
+    (Gerenciar Artigo Própria) as gerenciar_artigo
+    (Gerenciar Atividades Própria) as gerenciar_atividades
+    
+}
+
+usuario_nao_autenticado -up-> assistir_aula
+usuario_nao_autenticado -up-> ler_artigo
+usuario_nao_autenticado -up-> responder_atividade
+usuario_nao_autenticado -up-> fazer_cadastro
+usuario_nao_autenticado -up-> realizar_login
+
+assistir_aula ..> fazer_download <<extend>>
+ler_artigo ..> fazer_download <<extend>>
+
+usuario_autenticado --> usuario_nao_autenticado
+
+usuario_autenticado -down-> gerenciar_artigo
+usuario_autenticado -down-> gerenciar_atividades
+usuario_autenticado -down-> gerenciar_aula
+usuario_autenticado -down-> acompanhar_progresso_pessoal
+
+
+
+@enduml

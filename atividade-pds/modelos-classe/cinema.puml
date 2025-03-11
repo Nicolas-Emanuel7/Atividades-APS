@@ -1,0 +1,85 @@
+	
+@startuml Cinema
+
+class Cinema {
+    -nome: String
+    -endereco: String
+    -CNPJ: String
+    -telefone: String
+    -email: String
+    -site: String
+}
+
+class Sala {
+    -nro_sala: int
+    -capacidade: int
+
+    +conSala(): int
+}
+
+class Sessao {
+    -dt_sessao: Date
+    -horario_sessao: Time
+    -valor_inteiro: double
+    -valor_meia: double
+    -encerrada: boolean
+
+    +selSessao(): String
+
+}
+
+class Filme {
+    -titulo: String
+    -duracao: Time
+
+    +conFilme(): String
+}
+
+class Cliente {
+    -nome: String
+    -cpf: String
+}
+
+class Ingresso {
+    -valor: double
+    -tipo: String
+    -dt_compra: Date
+    
+    +comprarIngresso(): Ingresso
+    +conIngresso(): String
+}
+
+class Funcionario {
+    -nome: String
+    -cpf: String
+    -cargo: String
+    -salario: double
+
+    +conFuncionario(): String
+}
+
+class Genero {
+    -descricao: String
+}
+
+class Ator {
+    -nome: String
+    -papel: String
+}
+
+Cinema "1" -- "1..*" Sala : possui
+Cinema "1" -- "1..*" Sessao : possui
+Cinema "1" -- "0..*" Funcionario : possui
+
+Sessao "1" -- "1..*" Ingresso : têm
+Sessao "1" -- "1..*" Filme : exibe
+Filme "1" -- "1..*" Genero : pertence
+Filme "1..*" -- "1..*" Ator : participa
+
+Cliente "1" -- "0..*" Ingresso : compra
+Funcionario "1" -- "0..*" Ingresso : intermedia
+
+
+
+
+@enduml

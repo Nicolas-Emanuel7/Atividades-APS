@@ -1,0 +1,92 @@
+	
+@startuml
+
+class Universidade {
+    nome: String
+    endereco: String
+    CNPJ: String
+    telefone: String
+    email: String
+    site: String
+}
+
+class Curso {
+    nome: String
+    duracao: int
+    grau: String
+    turno: String
+    coordenador: Coordenador
+    disciplinas: Disciplina[]
+    turmas: Turma[]
+
+    definirDisciplinas()
+
+}
+
+class Coordenador {
+    nome: String
+    email: String
+    telefone: String
+    cpf: String
+}
+
+class Disciplina {
+    nome: String
+    carga_horaria: int
+    professor: Professor
+    turmas: Turma[]
+    alunos: Estudante[]
+
+    listarAlunos()
+    adicionarDisciplina()
+    removerDisciplina()
+}
+
+class Turma {
+    codigo: String
+    disciplina: Disciplina
+    alunos: Estudante[]
+    professor: Professor
+    horario: String
+    sala: String
+    periodo: String
+    ano: int
+    semestre: int
+}
+
+class Usuario {
+    usuario: String
+    senha:  String
+    nome: String
+    cpf: String
+    email: String
+    telefone: String
+
+    logar()
+    deslogar()
+}
+
+class Estudante <Usuario> {
+    idade: int
+    matricula: String
+    turmas: Turma[]
+}
+
+class Professor <Usuario> {
+    disciplinas: Disciplina[]
+    turmas: Turma[]
+    area: String
+}
+
+Universidade "1" -- "1..*" Curso
+Coordenador "1" -- "1" Curso
+Curso "1" -- "1..*" Disciplina
+Professor "1" -- "1..*" Disciplina
+Disciplina "1" -- "1..*" Turma
+Turma "1" -- "3..30" Estudante
+Estudante "1..*" -- "1..*" Disciplina
+Professor "1..*" -- "1..*" Turma
+Professor --|> Usuario
+Estudante --|> Usuario
+
+@enduml

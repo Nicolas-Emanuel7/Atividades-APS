@@ -1,0 +1,48 @@
+	
+@startuml Sistema de Passagens Aéreas
+
+class Usuario {
+    - nome: String
+    - cpf: String
+    - identificacaoPessoal: String
+}
+
+class CartaoDeCredito {
+    - numero: String
+    - validade: Date
+    - limite: Double
+
+    + validarCartao(): Boolean
+    + inserirCartao(cartao: CartaoDeCredito)
+}
+
+class Destino {
+    - nome: String
+    - preco: Double
+
+    + selecionarDestino(destino: Destino)
+}
+
+class Passagem {
+    - codigo: String
+    - destino: Destino
+    - preco: Double
+    - dataEmissao: Date
+
+    + emitirPassagem(usuario: Usuario, cartao: CartaoDeCredito)
+}
+
+class SistemaEmissaoPassagem {
+    + iniciarTransacao(usuario: Usuario)
+    + validarPagamento(cartao: CartaoDeCredito, valor: Double): Boolean
+    + emitirPassagem(usuario: Usuario, destino: Destino)
+}
+
+Usuario --> Destino : seleciona
+Usuario --> CartaoDeCredito : utiliza
+CartaoDeCredito --> SistemaEmissaoPassagem : valida
+Destino --> Passagem : associa
+Passagem --> Usuario : pertence
+SistemaEmissaoPassagem --> Passagem : emite
+
+@enduml
