@@ -1,0 +1,41 @@
+@startuml "Diagrama de Atividade - Biblioteca"
+start
+:Usuário solicita empréstimo;
+if (Livro disponível?) then (Sim)
+  :Registrar como emprestado;
+  :Definir prazo de devolução;
+else (Não)
+  if (Livro reservado?) then (Sim)
+    if (Solicitante é reservante?) then (Sim)
+      :Registrar como emprestado;
+      :Definir prazo de devolução;
+    else (Não)
+      :Negar solicitação;
+    endif
+  else (Não)
+    :Negar solicitação;
+  endif
+endif
+
+:Usuário pode renovar empréstimo;
+if (Ele vai renovar?) then (Sim)
+  :Renovação aprovada;
+  -> Usuário pode renovar empréstimo;
+else (Não)
+  -> Prazo expirado?;
+endif
+
+if (Prazo expirado?) then (Sim)
+  :Notificar usuário;
+  :Aplicar multa;
+endif
+
+:Usuário devolve o livro;
+if (Livro danificado?) then (Sim)
+  :Encaminhar para manutenção;
+else (Não)
+  :Retornar ao acervo;
+endif
+
+stop
+@enduml
